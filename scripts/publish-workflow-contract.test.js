@@ -10,7 +10,7 @@ test('bootstrap publishing is manual, environment-protected, provenance-bearing,
   assert.match(workflow, /environment: npm-production/);
   assert.match(workflow, /id-token: write/);
   assert.match(workflow, /--mode bootstrap/);
-  assert.match(workflow, /npm publish --access public --provenance --ignore-scripts/);
+  assert.match(workflow, /npm publish --access public --tag beta --provenance --ignore-scripts/);
   assert.match(workflow, /NPM_BOOTSTRAP_TOKEN/);
   assert.match(workflow, /publish tollary@0\.1\.0 testnet client only/);
   assert.doesNotMatch(workflow, /pull_request:|push:/);

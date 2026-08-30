@@ -1,5 +1,9 @@
 # Tollary
 
+> **Experimental beta — Base Sepolia testnet only.** This client and the
+> hosted Guard do not guarantee transaction safety, recipient identity,
+> legality, settlement, or loss prevention. Base Mainnet sales are disabled.
+
 Tollary is a local fit-check and MCP discovery client for a non-custodial Base
 USDC Agent Transaction Guard. The paid service checks one exact, owner-mandated
 transaction immediately before a customer-owned AWS KMS signer can sign it.
@@ -44,3 +48,6 @@ Mainnet availability is separate from package publication. Always check live
 purchase. A published client does not mean that real-value sales are active.
 The local client is MIT-licensed; Tollary's hosted API, service logic,
 trademarks, and commercial output are not granted under that license.
+
+This first release is published under the npm `beta` dist-tag. Install it
+explicitly with `npm install tollary@beta` or run it with `npx tollary@beta`.

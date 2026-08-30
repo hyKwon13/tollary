@@ -32,8 +32,8 @@ jobs:
         working-directory: packages/tollary
       - run: npm pack --dry-run --ignore-scripts
         working-directory: packages/tollary
-      - name: Publish first immutable public version with provenance
-        run: npm publish --access public --provenance --ignore-scripts
+      - name: Publish first immutable public beta with provenance
+        run: npm publish --access public --tag beta --provenance --ignore-scripts
         working-directory: packages/tollary
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_BOOTSTRAP_TOKEN }}

@@ -1,5 +1,9 @@
 # Tollary
 
+> **Experimental beta — Base Sepolia testnet only.** No transaction-safety,
+> recipient-identity, legal-compliance, settlement, or loss-prevention
+> guarantee is made. Base Mainnet sales are disabled.
+
 Tollary is a non-custodial Agent Transaction Guard for autonomous Base USDC
 payments. It checks an exact, owner-mandated transaction immediately before a
 customer-owned AWS KMS signer can sign it.
@@ -25,6 +29,8 @@ The hosted service currently exposes Base Sepolia testnet payment terms only.
 A published package does not mean that Base Mainnet sales are active. Check
 [`/api/readiness`](https://tollary.p-e.kr/api/readiness) and
 [`/api/legal`](https://tollary.p-e.kr/api/legal) before every purchase.
+The npm beta must be selected explicitly with `tollary@beta`; no `latest`
+release is created by the bootstrap workflow.
 
 ## Repository layout
 
