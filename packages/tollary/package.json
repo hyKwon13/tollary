@@ -1,0 +1,47 @@
+{
+  "name": "tollary",
+  "version": "0.1.0",
+  "mcpName": "kr.p-e.tollary/agent-transaction-guard",
+  "description": "Local fit-check and MCP discovery client for Tollary's non-custodial Base USDC Agent Transaction Guard.",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "tollary": "bin/tollary.js",
+    "tollary-mcp": "bin/tollary-mcp.js"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE",
+    "server.json"
+  ],
+  "keywords": [
+    "x402",
+    "mcp",
+    "agent-payments",
+    "base",
+    "usdc",
+    "aws-kms",
+    "transaction-guard",
+    "non-custodial"
+  ],
+  "homepage": "https://tollary.p-e.kr/",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyKwon13/tollary.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hyKwon13/tollary/issues"
+  }
+}

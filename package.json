@@ -1,0 +1,16 @@
+{
+  "name": "tollary-public-distribution",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "test": "node --test --test-concurrency=1 scripts/*.test.js packages/tollary/test/*.test.js distribution/github-action/*.test.cjs",
+    "distribution:source-preflight": "node scripts/validate-public-source.js",
+    "distribution:bind-repository": "node scripts/bind-public-repository.js",
+    "distribution:publish-preflight": "node scripts/validate-npm-publish-context.js --mode bootstrap",
+    "distribution:generate-mcp-auth": "node scripts/generate-mcp-registry-auth.js"
+  }
+}

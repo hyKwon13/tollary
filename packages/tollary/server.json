@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "kr.p-e.tollary/agent-transaction-guard",
+  "title": "Tollary Agent Transaction Guard",
+  "description": "Local fit-check and safe integration guidance for non-custodial Base USDC agent transactions.",
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "tollary",
+      "version": "0.1.0",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ],
+  "repository": {
+    "url": "https://github.com/hyKwon13/tollary",
+    "source": "github"
+  }
+}

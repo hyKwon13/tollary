@@ -1,0 +1,32 @@
+node_modules/
+dist/
+coverage/
+playwright-report/
+test-results/
+*.tgz
+.DS_Store
+
+# This checkout was prepared from a server home directory. Never publish host state.
+.codex/
+.ssh/
+.npm/
+.cache/
+.config/
+.local/
+.legacy-*/
+.bash_history
+.bash_logout
+.bashrc
+.profile
+.sudo_as_admin_successful
+
+# Never publish operational credentials or private signing material.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+cdp_api_key.json
+*private-key*
+*private_key*
+mcp-registry-auth-key*

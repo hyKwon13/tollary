@@ -1,0 +1,58 @@
+name: Publish Tollary to the official MCP Registry
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type "publish kr.p-e.tollary/agent-transaction-guard@0.1.0"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    if: ${{ inputs.confirmation == 'publish kr.p-e.tollary/agent-transaction-guard@0.1.0' }}
+    runs-on: ubuntu-latest
+    environment: mcp-production
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24.6.0'
+          package-manager-cache: false
+      - run: node scripts/validate-public-source.js
+      - name: Verify npm-first ordering, domain key, repository, and closed real-value sales
+        run: node scripts/validate-mcp-publish-context.js --phase before
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+      - name: Install the checksummed official mcp-publisher v1.8.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz \
+            --output "$RUNNER_TEMP/mcp-publisher.tgz"
+          echo "a06c9096dcb9727c13555b6be26c7effa707b01f06a4c561ba7a3635443cf2cc  $RUNNER_TEMP/mcp-publisher.tgz" | sha256sum --check --strict
+          mkdir "$RUNNER_TEMP/mcp-publisher"
+          tar --extract --gzip --file "$RUNNER_TEMP/mcp-publisher.tgz" --directory "$RUNNER_TEMP/mcp-publisher" mcp-publisher LICENSE README.md
+          chmod 0755 "$RUNNER_TEMP/mcp-publisher/mcp-publisher"
+      - name: Validate, authenticate to the domain namespace, and publish once
+        shell: bash
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}
+        run: |
+          set +x
+          set -euo pipefail
+          PUBLISHER="$RUNNER_TEMP/mcp-publisher/mcp-publisher"
+          "$PUBLISHER" validate packages/tollary/server.json
+          "$PUBLISHER" login http --domain tollary.p-e.kr --private-key "$MCP_PRIVATE_KEY"
+          trap '"$PUBLISHER" logout >/dev/null 2>&1 || true' EXIT
+          "$PUBLISHER" publish packages/tollary/server.json
+      - name: Verify the immutable version is visible
+        run: node scripts/validate-mcp-publish-context.js --phase after
+        env:
+          MCP_PRIVATE_KEY: ${{ secrets.MCP_PRIVATE_KEY }}

@@ -1,0 +1,33 @@
+name: Tollary Agent Payment Fit Check
+description: Detect whether a repository fits Tollary's AWS KMS Base USDC Agent Transaction Guard without uploading source or secrets.
+author: Tollary
+branding:
+  icon: shield
+  color: green
+inputs:
+  project:
+    description: Repository-relative project directory to inspect.
+    required: false
+    default: .
+outputs:
+  fit:
+    description: "true only when all Tollary architecture signals are present."
+    value: ${{ steps.summarize.outputs.fit }}
+  missing:
+    description: Comma-separated missing architecture signals.
+    value: ${{ steps.summarize.outputs.missing }}
+  next_step:
+    description: Public offer inspection command when the project is a fit.
+    value: ${{ steps.summarize.outputs.next_step }}
+runs:
+  using: composite
+  steps:
+    - name: Run pinned local fit check
+      shell: bash
+      env:
+        TOLLARY_PROJECT: ${{ inputs.project }}
+      run: npx --yes tollary@0.1.0 fit-check --project "$TOLLARY_PROJECT" --json > "$RUNNER_TEMP/tollary-fit-check.json"
+    - id: summarize
+      name: Publish non-sensitive summary
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/summarize.cjs" "$RUNNER_TEMP/tollary-fit-check.json" "$GITHUB_OUTPUT" "$GITHUB_STEP_SUMMARY"
