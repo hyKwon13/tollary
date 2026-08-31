@@ -20,7 +20,7 @@ test('GitHub Action exposes only bounded qualification output and no evidence pa
   const result = spawnSync(process.execPath, [script, input, output, summary], { encoding: 'utf8' });
   assert.equal(result.status, 0, result.stderr);
   assert.match(readFileSync(output, 'utf8'), /fit=true/);
-  assert.match(readFileSync(output, 'utf8'), /next_step=npx tollary@0\.1\.0 inspect/);
+  assert.match(readFileSync(output, 'utf8'), /next_step=npx tollary@0\.1\.1 inspect/);
   assert.doesNotMatch(readFileSync(summary, 'utf8'), /sensitive|internal\/path/);
 });
 

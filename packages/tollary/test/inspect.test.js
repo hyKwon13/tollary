@@ -24,6 +24,22 @@ test('inspects only the three public metadata endpoints', async () => {
   assert.ok(seen.every(item => item.options.method === 'GET'));
 });
 
+test('adds anonymous experiment headers when the CLI supplies them', async () => {
+  const seen = [];
+  const fetchImpl = async (url, options) => {
+    seen.push(options.headers);
+    if (url.endsWith('/api/product')) return response(200, {});
+    if (url.endsWith('/api/readiness')) return response(200, {});
+    return response(200, {});
+  };
+  await inspectOffer({
+    fetchImpl,
+    experiment: { session: '12345678-1234-4123-8123-123456789abc', source: 'guide-x402' }
+  });
+  assert.ok(seen.every(headers => headers['x-tollary-experiment-source'] === 'guide-x402'));
+  assert.ok(seen.every(headers => headers['x-tollary-experiment-session'].startsWith('12345678')));
+});
+
 test('rejects non-HTTPS remote origins', async () => {
   await assert.rejects(() => inspectOffer({ origin: 'http://example.com' }), /HTTPS/);
 });

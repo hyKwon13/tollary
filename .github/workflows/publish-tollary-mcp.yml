@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       confirmation:
-        description: Type "publish kr.p-e.tollary/agent-transaction-guard@0.1.0"
+        description: Type "publish kr.p-e.tollary/agent-transaction-guard@0.1.1"
         required: true
         type: string
 
@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   publish:
-    if: ${{ inputs.confirmation == 'publish kr.p-e.tollary/agent-transaction-guard@0.1.0' }}
+    if: ${{ inputs.confirmation == 'publish kr.p-e.tollary/agent-transaction-guard@0.1.1' }}
     runs-on: ubuntu-latest
     environment: mcp-production
     steps:

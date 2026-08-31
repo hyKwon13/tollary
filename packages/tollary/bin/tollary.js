@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { resolve } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { lstat, readFile } from 'node:fs/promises';
 import { DEFAULT_ORIGIN } from '../src/constants.js';
 import { runLocalFitCheck } from '../src/fit-check.js';
@@ -19,8 +20,8 @@ function help() {
     '',
     'Usage:',
     '  tollary fit-check [--project .] [--origin https://tollary.p-e.kr] [--json]',
-    '  tollary inspect [--origin https://tollary.p-e.kr] [--json]',
-    '  tollary lint --input ./guard-request.json [--origin https://tollary.p-e.kr] [--json]',
+    '  tollary inspect [--origin https://tollary.p-e.kr] [--source npm-cli] [--json]',
+    '  tollary lint --input ./guard-request.json [--origin https://tollary.p-e.kr] [--source npm-cli] [--json]',
     '  tollary plan [--origin https://tollary.p-e.kr] [--json]',
     '',
     'fit-check is local/read-only and skips .env, keys, credentials, vendor, and build directories.',
@@ -41,6 +42,11 @@ export async function main(args = process.argv.slice(2)) {
   }
   const json = args.includes('--json');
   const origin = option(args, '--origin', DEFAULT_ORIGIN);
+  const source = option(args, '--source', 'npm-cli');
+  if (!/^[a-z0-9][a-z0-9._-]{0,63}$/.test(source)) {
+    throw Object.assign(new Error('source must be a short lowercase label'), { code: 'invalid-source' });
+  }
+  const experiment = { session: randomUUID(), source };
   if (command === 'fit-check') {
     const project = resolve(option(args, '--project', '.'));
     const result = await runLocalFitCheck({ project, origin });
@@ -48,7 +54,7 @@ export async function main(args = process.argv.slice(2)) {
     return 0;
   }
   if (command === 'inspect') {
-    print(await inspectOffer({ origin }), json);
+    print(await inspectOffer({ origin, experiment }), json);
     return 0;
   }
   if (command === 'lint') {
@@ -61,7 +67,7 @@ export async function main(args = process.argv.slice(2)) {
     }
     let request;
     try { request = JSON.parse(await readFile(input, 'utf8')); } catch { throw Object.assign(new Error(), { code: 'invalid-input-json' }); }
-    print(await lintGuardRequest({ request, origin }), json);
+    print(await lintGuardRequest({ request, origin, experiment }), json);
     return 0;
   }
   if (command === 'plan') {

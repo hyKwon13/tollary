@@ -26,7 +26,7 @@ runs:
       shell: bash
       env:
         TOLLARY_PROJECT: ${{ inputs.project }}
-      run: npx --yes tollary@0.1.0 fit-check --project "$TOLLARY_PROJECT" --json > "$RUNNER_TEMP/tollary-fit-check.json"
+      run: npx --yes tollary@0.1.1 fit-check --project "$TOLLARY_PROJECT" --json > "$RUNNER_TEMP/tollary-fit-check.json"
     - id: summarize
       name: Publish non-sensitive summary
       shell: bash

@@ -11,10 +11,15 @@ function canonicalOrigin(value = DEFAULT_ORIGIN) {
   return url.origin;
 }
 
-async function getJson(url, fetchImpl, timeoutMs) {
+const experimentHeaders = experiment => experiment?.session && experiment?.source ? {
+  'x-tollary-experiment-session': experiment.session,
+  'x-tollary-experiment-source': experiment.source
+} : {};
+
+async function getJson(url, fetchImpl, timeoutMs, experiment) {
   const response = await fetchImpl(url, {
     method: 'GET',
-    headers: { accept: 'application/json', 'user-agent': `tollary-cli/${PACKAGE_VERSION}` },
+    headers: { accept: 'application/json', 'user-agent': `tollary-cli/${PACKAGE_VERSION}`, ...experimentHeaders(experiment) },
     signal: AbortSignal.timeout(timeoutMs),
     redirect: 'error'
   });
@@ -27,13 +32,13 @@ async function getJson(url, fetchImpl, timeoutMs) {
   return { status: response.status, body: await response.json() };
 }
 
-export async function inspectOffer({ origin = DEFAULT_ORIGIN, fetchImpl = fetch, timeoutMs = 8_000 } = {}) {
+export async function inspectOffer({ origin = DEFAULT_ORIGIN, fetchImpl = fetch, timeoutMs = 8_000, experiment = null } = {}) {
   const safeOrigin = canonicalOrigin(origin);
   const links = guardLinks(safeOrigin);
   const [product, readiness, legal] = await Promise.all([
-    getJson(links.product, fetchImpl, timeoutMs),
-    getJson(links.readiness, fetchImpl, timeoutMs),
-    getJson(links.privacyApi, fetchImpl, timeoutMs)
+    getJson(links.product, fetchImpl, timeoutMs, experiment),
+    getJson(links.readiness, fetchImpl, timeoutMs, experiment),
+    getJson(links.privacyApi, fetchImpl, timeoutMs, experiment)
   ]);
   return Object.freeze({
     schemaVersion: 'tollary-offer-inspection-v1',
@@ -64,13 +69,13 @@ function assertPublicGuardRequest(value) {
 }
 
 export async function lintGuardRequest({
-  request, origin = DEFAULT_ORIGIN, fetchImpl = fetch, timeoutMs = 8_000
+  request, origin = DEFAULT_ORIGIN, fetchImpl = fetch, timeoutMs = 8_000, experiment = null
 } = {}) {
   assertPublicGuardRequest(request);
   const safeOrigin = canonicalOrigin(origin);
   const response = await fetchImpl(`${safeOrigin}/api/v1/base/usdc/guard/lint`, {
     method: 'POST',
-    headers: { 'content-type': 'application/json', accept: 'application/json', 'user-agent': `tollary-cli/${PACKAGE_VERSION}` },
+    headers: { 'content-type': 'application/json', accept: 'application/json', 'user-agent': `tollary-cli/${PACKAGE_VERSION}`, ...experimentHeaders(experiment) },
     body: JSON.stringify(request),
     signal: AbortSignal.timeout(timeoutMs),
     redirect: 'error'

@@ -20,6 +20,13 @@ and build files. It reports only relative file paths and architecture signals;
 it does not upload source code. `inspect` fetches public metadata only. None of
 these commands accepts a private key, connects a wallet, signs, or pays.
 
+`inspect` and `lint` send a fresh random per-command experiment session and a
+short source label so Tollary can measure whether the public beta is useful.
+The acquisition ledger stores only a SHA-256 session hash, event type, source,
+and timestamp; it does not store the submitted request, project path, wallet,
+credential, or raw identifier. Use `--source your-label` to identify a guide or
+integration. Counts are anonymous telemetry, not verified unique people.
+
 Only projects showing all five signals—AWS KMS, secp256k1, Base Mainnet,
 official Base USDC, and autonomous/x402 execution—receive the paid Guard next
 step. This avoids selling an irrelevant product to projects that do not fit.
@@ -49,5 +56,5 @@ purchase. A published client does not mean that real-value sales are active.
 The local client is MIT-licensed; Tollary's hosted API, service logic,
 trademarks, and commercial output are not granted under that license.
 
-This first release is published under the npm `beta` dist-tag. Install it
-explicitly with `npm install tollary@beta` or run it with `npx tollary@beta`.
+Version 0.1.1 remains an experimental Base Sepolia beta. Install it with
+`npm install tollary@0.1.1` or run it with `npx tollary@0.1.1`.

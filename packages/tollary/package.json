@@ -1,8 +1,8 @@
 {
   "name": "tollary",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "mcpName": "kr.p-e.tollary/agent-transaction-guard",
-  "description": "Experimental testnet fit-check and MCP discovery client for Tollary's non-custodial Base USDC Agent Transaction Guard.",
+  "description": "Local fit-check and MCP discovery client for Tollary's non-custodial Base USDC Agent Transaction Guard.",
   "type": "module",
   "license": "MIT",
   "engines": {

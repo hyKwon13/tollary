@@ -15,7 +15,7 @@ if (!Array.isArray(result.missing) || result.missing.some(value => !allowedSigna
   throw new Error('Unexpected Tollary signal name.');
 }
 const missing = result.missing.join(',');
-const next = result.fit ? 'npx tollary@0.1.0 inspect' : '';
+const next = result.fit ? 'npx tollary@0.1.1 inspect' : '';
 const fileCount = Number(result.scanned?.files);
 if (!Number.isSafeInteger(fileCount) || fileCount < 0 || fileCount > 2_000) {
   throw new Error('Unexpected Tollary scan count.');
@@ -29,7 +29,7 @@ fs.appendFileSync(summary, [
   `- Missing signals: ${missing || 'none'}`,
   '',
   result.fit
-    ? 'Inspect the live price, readiness, legal disclosure, and contract with `npx tollary@0.1.0 inspect` before any purchase.'
+    ? 'Inspect the live price, readiness, legal disclosure, and contract with `npx tollary@0.1.1 inspect` before any purchase.'
     : 'No paid product is recommended for this repository.',
   '',
   'Source contents and evidence paths are intentionally not copied into the job summary.'

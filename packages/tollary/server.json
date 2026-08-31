@@ -3,12 +3,12 @@
   "name": "kr.p-e.tollary/agent-transaction-guard",
   "title": "Tollary Agent Transaction Guard",
   "description": "Local fit-check and safe integration guidance for non-custodial Base USDC agent transactions.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "tollary",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "transport": {
         "type": "stdio"
       }
