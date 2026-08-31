@@ -26,7 +26,9 @@ jobs:
           registry-url: https://registry.npmjs.org
           package-manager-cache: false
       - name: Bind manual approval to the package manifest
-        run: test "$CONFIRMATION" = "publish tollary@$(node -p \"require('./packages/tollary/package.json').version\")"
+        run: |
+          EXPECTED_VERSION="$(node -p "require('./packages/tollary/package.json').version")"
+          test "$CONFIRMATION" = "publish tollary@$EXPECTED_VERSION"
         env:
           CONFIRMATION: ${{ inputs.confirmation }}
       - run: node scripts/validate-public-source.js
